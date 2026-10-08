@@ -13,6 +13,8 @@ namespace GestionLibreriaCristal.Data
         public DbSet<Categoria> Categorias => Set<Categoria>();
         public DbSet<Proveedor> Proveedores => Set<Proveedor>();
         public DbSet<Cliente> Clientes => Set<Cliente>();
+        public DbSet<Pedido> Pedidos => Set<Pedido>();
+        public DbSet<DetallePedido> DetallesPedido => Set<DetallePedido>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -54,6 +56,44 @@ namespace GestionLibreriaCristal.Data
                 .HasForeignKey(p => p.ProveedorId)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            // Configuración de precisión para decimales
+            modelBuilder.Entity<Pedido>()
+                .Property(p => p.DescuentoPorcentaje)
+                .HasPrecision(5, 2);
+
+            modelBuilder.Entity<Pedido>()
+                .Property(p => p.DescuentoMonto)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Pedido>()
+                .Property(p => p.TotalPagado)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<DetallePedido>()
+                .Property(d => d.PrecioUnitario)
+                .HasPrecision(18, 2);
+
+            // Relación Pedido → Cliente
+            modelBuilder.Entity<Pedido>()
+                .HasOne(p => p.Cliente)
+                .WithMany()
+                .HasForeignKey(p => p.ClienteId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Relación Pedido → Detalles (cascade: al borrar pedido, se borran los detalles)
+            modelBuilder.Entity<Pedido>()
+                .HasMany(p => p.Detalles)
+                .WithOne(d => d.Pedido)
+                .HasForeignKey(d => d.PedidoId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relación Detalle → Producto
+            modelBuilder.Entity<DetallePedido>()
+                .HasOne(d => d.Producto)
+                .WithMany()
+                .HasForeignKey(d => d.ProductoId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             // Datos iniciales: categorías típicas de una librería cristiana
             modelBuilder.Entity<Categoria>().HasData(
                 new Categoria { Id = 1, Nombre = "Biblias", ColorHex = "#89B4FA" },
@@ -84,6 +124,11 @@ namespace GestionLibreriaCristal.Data
                     FechaAlta = new DateTime(2025, 1, 1)
                 }
             );
+            
+
+            modelBuilder.Entity<Pedido>()
+                .HasIndex(p => p.Numero)
+                .IsUnique();
         }
     }
 }
