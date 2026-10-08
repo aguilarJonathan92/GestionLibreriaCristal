@@ -1,0 +1,125 @@
+﻿<Window x:Class="GestionLibreriaCristal.Views.ProductoEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Producto"
+        Height="620" Width="520"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#FDF2F8"
+        FontFamily="Corbel">
+
+    <Grid Margin="30">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Título -->
+        <TextBlock x:Name="TituloVentana"
+                   Grid.Row="0"
+                   Text="Nuevo producto"
+                   FontFamily="Candara"
+                   FontSize="22"
+                   FontWeight="Bold"
+                   Foreground="#4A2C3D"
+                   Margin="0,0,0,20" />
+
+        <!-- Formulario con scroll -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Nombre -->
+                <TextBlock Text="Nombre *" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                <TextBox Text="{Binding Nombre, UpdateSourceTrigger=PropertyChanged}"
+                         Padding="8" BorderBrush="#F9A8D4" BorderThickness="1"
+                         Margin="0,0,0,15" />
+
+                <!-- Descripción -->
+                <TextBlock Text="Descripción" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                <TextBox Text="{Binding Descripcion, UpdateSourceTrigger=PropertyChanged}"
+                         Padding="8" BorderBrush="#F9A8D4" BorderThickness="1"
+                         AcceptsReturn="True" TextWrapping="Wrap" Height="60"
+                         VerticalScrollBarVisibility="Auto"
+                         Margin="0,0,0,15" />
+
+                <!-- Categoría -->
+                <TextBlock Text="Categoría *" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                <ComboBox ItemsSource="{Binding Categorias}"
+                          SelectedItem="{Binding CategoriaSeleccionada}"
+                          DisplayMemberPath="Nombre"
+                          Padding="8"
+                          Margin="0,0,0,15" />
+
+                <!-- Proveedor -->
+                <TextBlock Text="Proveedor" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                <ComboBox ItemsSource="{Binding Proveedores}"
+                          SelectedItem="{Binding ProveedorSeleccionado}"
+                          DisplayMemberPath="Nombre"
+                          Padding="8"
+                          Margin="0,0,0,15" />
+
+                <!-- Grid de 2 columnas para costo/precio -->
+                <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="15" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Costo de compra" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                        <TextBox Text="{Binding CostoCompra, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                 Padding="8" BorderBrush="#F9A8D4" BorderThickness="1" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Precio de venta *" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                        <TextBox Text="{Binding PrecioVenta, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
+                                 Padding="8" BorderBrush="#F9A8D4" BorderThickness="1" />
+                    </StackPanel>
+                </Grid>
+
+                <!-- Grid de 2 columnas para stocks -->
+                <Grid Margin="0,0,0,15">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="15" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Stock actual" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                        <TextBox Text="{Binding StockActual, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" BorderBrush="#F9A8D4" BorderThickness="1" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Stock mínimo" Foreground="#4A2C3D" Margin="0,0,0,5" />
+                        <TextBox Text="{Binding StockMinimo, UpdateSourceTrigger=PropertyChanged}"
+                                 Padding="8" BorderBrush="#F9A8D4" BorderThickness="1" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Botones -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Content="Cancelar"
+                    Click="Cancelar_Click"
+                    Padding="20,10"
+                    Background="#E5E5E5"
+                    Foreground="#4A2C3D"
+                    BorderThickness="0"
+                    Cursor="Hand"
+                    Margin="0,0,10,0" />
+            <Button Content="Guardar"
+                    Click="Guardar_Click"
+                    Padding="20,10"
+                    Background="#EC4899"
+                    Foreground="White"
+                    BorderThickness="0"
+                    FontWeight="SemiBold"
+                    Cursor="Hand" />
+        </StackPanel>
+    </Grid>
+</Window>
