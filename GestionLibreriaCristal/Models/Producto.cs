@@ -24,6 +24,8 @@ namespace GestionLibreriaCristal.Models
 
         public int StockActual { get; set; }
         public int StockMinimo { get; set; }
+        //Unidadees reservadas por pedidos por encargo que todavía no se entregaron.
+        public int StockComprometido { get; set; }
 
         // ===== Propiedades calculadas (NO se guardan en la BD) =====
 
@@ -31,6 +33,8 @@ namespace GestionLibreriaCristal.Models
 
         public decimal MargenPorcentaje =>
             CostoCompra == 0 ? 0 : (MargenUnitario / CostoCompra) * 100;
+
+        public int StockDisponible => StockActual - StockComprometido;
 
         public EstadoStock Estado =>
             StockActual == 0 ? EstadoStock.SinStock :
