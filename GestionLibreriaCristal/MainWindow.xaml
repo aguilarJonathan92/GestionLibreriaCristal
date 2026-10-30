@@ -53,6 +53,9 @@
                     <Button Content="👤  Clientes"
                         Style="{StaticResource NavButtonStyle}"
                         Click="Clientes_Click" />
+                    <Button Content="💳  Cuentas Corrientes"
+                        Style="{StaticResource NavButtonStyle}"
+                        Click="CuentaCorriente_Click" />    
                     <Button Content="📦  Productos"
                         Style="{StaticResource NavButtonStyle}"
                         Click="Productos_Click" />

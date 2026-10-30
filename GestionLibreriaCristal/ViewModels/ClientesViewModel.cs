@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GestionLibreriaCristal.Data;
 using GestionLibreriaCristal.Models;
 using GestionLibreriaCristal.Views;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace GestionLibreriaCristal.ViewModels
 {
@@ -42,6 +43,7 @@ namespace GestionLibreriaCristal.ViewModels
         {
             using var db = new LibreriaDbContext();
             _todosLosClientes = db.Clientes
+                .Include(c => c.Movimientos)
                 .OrderBy(c => c.Nombre)
                 .ToList();
 
@@ -109,6 +111,7 @@ namespace GestionLibreriaCristal.ViewModels
                 return;
             }
 
+            //esto podria eliminar mas adelante, pero por ahora no lo hago
             if (ClienteSeleccionado.Saldo != 0)
             {
                 MessageBox.Show(

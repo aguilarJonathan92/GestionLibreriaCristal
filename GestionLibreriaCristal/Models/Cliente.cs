@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace GestionLibreriaCristal.Models
@@ -13,11 +14,10 @@ namespace GestionLibreriaCristal.Models
         public string? Direccion { get; set; }
         public string? DniCuit { get; set; }
         public string? Notas { get; set; }
-
-        /// <summary>
-        /// Saldo actual. Positivo = debe dinero. Negativo = tiene saldo a favor.
-        /// </summary>
-        public decimal Saldo { get; set; }
+        
+        public List<MovimientoCuenta> Movimientos { get; set; } = new();
+        [NotMapped]
+        public decimal Saldo => Movimientos?.Sum(m => m.MontoConSigno) ?? 0;
 
         /// <summary>
         /// Permite "ocultar" clientes sin borrarlos, para no perder el historial.

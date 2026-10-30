@@ -303,12 +303,32 @@ namespace GestionLibreriaCristal.ViewModels
 
             // Actualizar stock
             ActualizarStock(db, Items.ToList(), DescontarStock, esAlta: true);
+            db.SaveChanges();
 
-            // Actualizar saldo del cliente si corresponde
+            // Generar movimiento de cuenta corriente si corresponde
             if (FormaPago == FormaPago.CuentaCorriente && Saldo > 0)
             {
-                var cliente = db.Clientes.First(c => c.Id == ClienteSeleccionado!.Id);
-                cliente.Saldo += Saldo;
+                var clienteDb = db.Clientes.FirstOrDefault(c => c.Id == ClienteSeleccionado!.Id)
+                    ?? db.Clientes.FirstOrDefault(c => c.Nombre == ClienteSeleccionado!.Nombre);
+
+                if (clienteDb == null)
+                {
+                    MessageBox.Show(
+                        "Error: El cliente no existe en la base de datos. No se puede registrar la deuda.",
+                        "Error de integridad",
+                        MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false;
+                }
+
+                db.MovimientosCuenta.Add(new MovimientoCuenta
+                {
+                    ClienteId = clienteDb.Id,
+                    Fecha = DateTime.Now,
+                    Tipo = TipoMovimiento.Cargo,
+                    Monto = Saldo,
+                    Descripcion = $"Pedido Nº {pedido.Numero} (fiado)",
+                    PedidoId = pedido.Id
+                });
             }
 
             db.SaveChanges();
@@ -328,11 +348,13 @@ namespace GestionLibreriaCristal.ViewModels
                 Cantidad = d.Cantidad
             }).ToList(), pedido.DescontarStock, esAlta: false);
 
-            // 2. Revertir el saldo del cliente del pedido original
+            // Revertir el movimiento de cuenta corriente del pedido original
             if (pedido.FormaPago == FormaPago.CuentaCorriente && pedido.SaldoPendiente > 0)
             {
-                var clienteAnt = db.Clientes.First(c => c.Id == pedido.ClienteId);
-                clienteAnt.Saldo -= pedido.SaldoPendiente;
+                var movimientoViejo = db.MovimientosCuenta
+                    .FirstOrDefault(m => m.PedidoId == pedido.Id && m.Tipo == TipoMovimiento.Cargo);
+                if (movimientoViejo != null)
+                    db.MovimientosCuenta.Remove(movimientoViejo);
             }
 
             // 3. Borrar los detalles viejos
@@ -365,13 +387,19 @@ namespace GestionLibreriaCristal.ViewModels
             // 6. Aplicar el stock nuevo
             ActualizarStock(db, Items.ToList(), DescontarStock, esAlta: true);
 
-            // 7. Actualizar el saldo del cliente nuevo
+            // Generar nuevo movimiento de cuenta corriente
             if (FormaPago == FormaPago.CuentaCorriente && Saldo > 0)
             {
-                var cliente = db.Clientes.First(c => c.Id == ClienteSeleccionado!.Id);
-                cliente.Saldo += Saldo;
+                db.MovimientosCuenta.Add(new MovimientoCuenta
+                {
+                    ClienteId = ClienteSeleccionado!.Id,
+                    Fecha = DateTime.Now,
+                    Tipo = TipoMovimiento.Cargo,
+                    Monto = Saldo,
+                    Descripcion = $"Pedido Nº {pedido.Numero} (fiado) - editado",
+                    PedidoId = pedido.Id
+                });
             }
-
             db.SaveChanges();
             return true;
         }

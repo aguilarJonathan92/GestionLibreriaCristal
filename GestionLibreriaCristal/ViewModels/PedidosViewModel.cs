@@ -181,11 +181,13 @@ namespace GestionLibreriaCristal.ViewModels
                 }
             }
 
-            // 2. Restar el saldo pendiente del cliente (si corresponde)
-            if (pedido.FormaPago == FormaPago.CuentaCorriente && pedido.SaldoPendiente > 0)
+            // Eliminar el movimiento de cuenta corriente del pedido anulado
+            if (pedido.FormaPago == FormaPago.CuentaCorriente)
             {
-                var cliente = db.Clientes.First(c => c.Id == pedido.ClienteId);
-                cliente.Saldo -= pedido.SaldoPendiente;
+                var movimientos = db.MovimientosCuenta
+                    .Where(m => m.PedidoId == pedido.Id)
+                    .ToList();
+                db.MovimientosCuenta.RemoveRange(movimientos);
             }
 
             // 3. Marcar como anulado

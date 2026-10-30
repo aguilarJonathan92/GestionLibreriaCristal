@@ -15,6 +15,7 @@ namespace GestionLibreriaCristal.Data
         public DbSet<Cliente> Clientes => Set<Cliente>();
         public DbSet<Pedido> Pedidos => Set<Pedido>();
         public DbSet<DetallePedido> DetallesPedido => Set<DetallePedido>();
+        public DbSet<MovimientoCuenta> MovimientosCuenta => Set<MovimientoCuenta>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -109,8 +110,7 @@ namespace GestionLibreriaCristal.Data
             );
 
             modelBuilder.Entity<Cliente>()
-                .Property(c => c.Saldo)
-                .HasPrecision(18, 2);
+                .Ignore(c => c.Saldo);
 
             // Cliente de ejemplo (opcional, podés borrarlo)
             modelBuilder.Entity<Cliente>().HasData(
@@ -119,7 +119,6 @@ namespace GestionLibreriaCristal.Data
                     Id = 1,
                     Nombre = "Consumidor Final",
                     Telefono = "-",
-                    Saldo = 0,
                     Activo = true,
                     FechaAlta = new DateTime(2025, 1, 1)
                 }
@@ -129,6 +128,26 @@ namespace GestionLibreriaCristal.Data
             modelBuilder.Entity<Pedido>()
                 .HasIndex(p => p.Numero)
                 .IsUnique();
+
+
+            // Precisión para el monto
+            modelBuilder.Entity<MovimientoCuenta>()
+                .Property(m => m.Monto)
+                .HasPrecision(18, 2);
+
+            // Relación Movimiento → Cliente
+            modelBuilder.Entity<MovimientoCuenta>()
+                .HasOne(m => m.Cliente)
+                .WithMany()
+                .HasForeignKey(m => m.ClienteId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Relación Movimiento → Pedido (opcional)
+            modelBuilder.Entity<MovimientoCuenta>()
+                .HasOne(m => m.Pedido)
+                .WithMany()
+                .HasForeignKey(m => m.PedidoId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

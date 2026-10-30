@@ -18,7 +18,6 @@ namespace GestionLibreriaCristal.ViewModels
         [ObservableProperty] private string? direccion;
         [ObservableProperty] private string? dniCuit;
         [ObservableProperty] private string? notas;
-        [ObservableProperty] private decimal saldo;
         [ObservableProperty] private bool activo = true;
 
         // Constructor para NUEVO cliente
@@ -40,7 +39,6 @@ namespace GestionLibreriaCristal.ViewModels
             Direccion = cliente.Direccion;
             DniCuit = cliente.DniCuit;
             Notas = cliente.Notas;
-            Saldo = cliente.Saldo;
             Activo = cliente.Activo;
         }
 
@@ -76,7 +74,6 @@ namespace GestionLibreriaCristal.ViewModels
                 cliDb.Direccion = Direccion?.Trim();
                 cliDb.DniCuit = DniCuit?.Trim();
                 cliDb.Notas = Notas?.Trim();
-                cliDb.Saldo = Saldo;
                 cliDb.Activo = Activo;
             }
             else
@@ -89,7 +86,6 @@ namespace GestionLibreriaCristal.ViewModels
                     Direccion = Direccion?.Trim(),
                     DniCuit = DniCuit?.Trim(),
                     Notas = Notas?.Trim(),
-                    Saldo = Saldo,
                     Activo = Activo,
                     FechaAlta = DateTime.Now
                 };

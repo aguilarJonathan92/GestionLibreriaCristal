@@ -45,5 +45,10 @@ namespace GestionLibreriaCristal
         {
             ContenidoPrincipal.Content = new PedidosView();
         }
+
+        private void CuentaCorriente_Click(object sender, RoutedEventArgs e)
+        {
+            ContenidoPrincipal.Content = new CuentaCorrienteView();
+        }
     }
 }

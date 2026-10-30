@@ -77,10 +77,12 @@
                         <TextBlock Text="Saldo" Foreground="#4A2C3D" Margin="0,0,0,5" />
                         <TextBox Text="{Binding Saldo, UpdateSourceTrigger=PropertyChanged, StringFormat=N2}"
                                  Padding="8" BorderBrush="#F9A8D4" BorderThickness="1" />
-                        <TextBlock Text="Positivo = debe. Negativo = a favor."
-                                   Foreground="#9D7B8C"
-                                   FontSize="11"
-                                   Margin="0,4,0,0" />
+                        <!-- Reemplazar el bloque del saldo por esto: -->
+                        <TextBlock Text="El saldo se gestiona desde el módulo de Cuentas Corrientes."
+                               Foreground="#9D7B8C"
+                               FontSize="12"
+                               FontStyle="Italic"
+                               Margin="0,0,0,15" />     
                     </StackPanel>
 
                     <CheckBox Grid.Column="2"
