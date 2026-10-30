@@ -59,7 +59,9 @@
                     <Button Content="🏷️  Categorías"
                         Style="{StaticResource NavButtonStyle}"
                         Click="Categorias_Click" />
-                    <Button Content="🛒  Pedidos"    Style="{StaticResource NavButtonStyle}" />
+                    <Button Content="🛒  Pedidos"
+                        Style="{StaticResource NavButtonStyle}"
+                        Click="Pedidos_Click" />    
                     <Button Content="🚚  Proveedores"
                         Style="{StaticResource NavButtonStyle}"
                         Click="Proveedores_Click" />

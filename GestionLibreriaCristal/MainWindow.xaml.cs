@@ -40,5 +40,10 @@ namespace GestionLibreriaCristal
         {
             ContenidoPrincipal.Content = new ClientesView();
         }
+
+        private void Pedidos_Click(object sender, RoutedEventArgs e)
+        {
+            ContenidoPrincipal.Content = new PedidosView();
+        }
     }
 }
