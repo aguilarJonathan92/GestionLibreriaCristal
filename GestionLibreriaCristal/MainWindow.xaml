@@ -49,7 +49,9 @@
 
                 <!-- Botones de navegación -->
                 <StackPanel Grid.Row="1">
-                    <Button Content="🏠  Inicio"       Style="{StaticResource NavButtonStyle}" />
+                    <Button Content="🏠  Inicio"
+                        Style="{StaticResource NavButtonStyle}"
+                        Click="Inicio_Click" />
                     <Button Content="👤  Clientes"
                         Style="{StaticResource NavButtonStyle}"
                         Click="Clientes_Click" />

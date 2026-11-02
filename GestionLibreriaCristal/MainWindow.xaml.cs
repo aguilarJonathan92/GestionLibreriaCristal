@@ -20,6 +20,14 @@ namespace GestionLibreriaCristal
         public MainWindow()
         {
             InitializeComponent();
+
+            ContenidoPrincipal.Content = new DashboardView();
+        
+        }
+
+        private void Inicio_Click(object sender, RoutedEventArgs e)
+        {
+            ContenidoPrincipal.Content = new DashboardView();
         }
 
         private void Productos_Click(object sender, RoutedEventArgs e)
